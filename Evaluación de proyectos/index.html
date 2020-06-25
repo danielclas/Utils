@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+
+        <h1 class="display-4">Valor presente</h1>        
+
+        <div class="row align-items-center">
+            <div class="col">
+                <h4 class="badge badge-secondary">Formula valor unico</h4>
+                <br>
+                <input type="text" name="concepto" id="concepto" placeholder="Concepto">
+                <input type="number" name="valor" id="valor" placeholder="Constante">
+                <input type="number" name="i" id="i" placeholder="Valor de I">
+                <input type="text" name="periodos" id="periodos" placeholder="Periodos">
+            </div>
+
+            <div class="col">
+                <h4 class="badge badge-secondary">Formula uniforme</h4>
+                <br>
+                <input type="text" name="concepto" id="concepto2" placeholder="Concepto">
+                <input type="number" name="constante" id="constante" placeholder="Constante">
+                <input type="number" name="i2" id="i2" placeholder="Valor de I">
+                <input type="number" name="periodos2" id="periodos2" placeholder="Periodos">
+            </div>
+
+            <div class="col">
+                <h4 class="badge badge-secondary">Formula IEF</h4>
+                <br>
+                <input type="number" name="i3" id="i3" placeholder="Valor de I">
+                <input type="number" name="periodos3" id="periodos3" placeholder="periodos">
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col">
+                <br>
+                <button type="button" class="btn btn-primary" onclick="valorPresente(true)">Sumar</button>
+                <button type="button" class="btn btn-primary" onclick="valorPresente(false)">Restar</button>
+            </div>
+            <div class="col">
+                <br>
+                <button type="button" class="btn btn-primary" onclick="formulaUniforme(true)">Sumar</button>
+                <button type="button" class="btn btn-primary" onclick="formulaUniforme(false)">Restar</button>
+            </div>
+            <div class="col">
+                <br>
+                <button type="button" class="btn btn-primary" onclick="ief()">Calcular</button>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="card col-12" style="margin-top: 20px; font-size:25px; padding: 5px;" id="acumulador">
+
+            </div>
+            <div class="card col-12" style="margin-top: 10px;" id="resultado">
+
+            </div>
+            <div class="col">
+                <br>
+                <button type="button" class="btn btn-primary" onclick="limpiar()">Limpiar Resultados</button>
+                <button type="button" class="btn btn-primary" onclick="limpiarForm()">Limpiar Form</button>
+            </div>  
+        </div>
+    </div>
+    <script>
+        let resultado = document.getElementById('resultado');
+        let acumDiv = document.getElementById('acumulador');
+        let acumulador = 0;
+
+        function valorPresente(sumar){
+            let obj = {};
+            obj.Concepto = document.getElementById('concepto').value;
+            obj.Valor = parseFloat(document.getElementById('valor').value);
+            obj.I = parseFloat(document.getElementById('i').value);
+            obj.Periodos = document.getElementById('periodos').value;
+
+            let result = 0;
+            if(obj.Periodos.includes(' ')){
+                obj.Periodos = obj.Periodos.split(' ');
+                obj.Periodos.forEach( p => {
+                    let num = obj.Valor;
+                    let den = Math.pow(1+obj.I,parseFloat(p));
+                    result+=num/den;
+                })
+            }else{
+                let num = obj.Valor;
+                let den = Math.pow(1+obj.I,parseFloat(obj.Periodos));
+                result = num/den;
+            }          
+
+            if(!sumar) result*=-1;
+            acumulador+=result;
+
+            appendWithResult("Único", obj, result);
+        }
+
+        function formulaUniforme(sumar){
+            let obj = {};
+            obj.Concepto = document.getElementById('concepto2').value;
+            obj.Valor = parseFloat(document.getElementById('constante').value);
+            obj.I = parseFloat(document.getElementById('i2').value);
+            obj.Periodos = parseFloat(document.getElementById('periodos2').value);
+
+            let pow = Math.pow((1+obj.I),obj.Periodos)
+            let num = pow-1;
+            let den = pow * obj.I;           
+
+            let result = obj.Valor * (num/den);
+
+            if(!sumar) result*=-1;
+            acumulador+=result;
+
+            console.log("Obj: ",obj);
+            console.log("Result: ",{result,acumulador});
+
+            appendWithResult("Uniforme", obj, result);
+        }
+
+        function ief(){
+            //(1+i)12 -1
+            let obj = {};
+            obj.I = parseFloat(document.getElementById('i3').value);
+            obj.Periodos = parseFloat(document.getElementById('periodos3').value);
+
+            let result = Math.pow((1+obj.I),obj.Periodos)-1;
+
+            appendWithResult("IEF", obj, result);
+        }
+
+        function appendWithResult(name, params, result){
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('card-body');
+            
+            let innerHtml = "<b> "+name+" - Resultado: "+result+"</b><br>";
+
+            for(let key in params){
+                innerHtml+= ""+key+": "+params[key]+"<br>";
+            }
+
+            newDiv.innerHTML = innerHtml;
+            resultado.appendChild(newDiv);
+            resultado.appendChild(document.createElement('hr'));            
+
+            acumDiv.innerText = acumulador;
+
+            limpiarForm();
+        }
+
+        function limpiar(){
+            let children = resultado.childNodes;
+
+            if(acumDiv.innerText != "") acumDiv.innerText = "";
+            if(children.length>0) resultado.removeChild(children[0]);
+            if(children.length>0) limpiar();
+        }
+
+        function limpiarForm(){
+            let input = document.querySelectorAll('input');
+
+            input.forEach( i => {
+                i.value = "";
+            })
+        }
+    </script>
+</body>
+</html>
