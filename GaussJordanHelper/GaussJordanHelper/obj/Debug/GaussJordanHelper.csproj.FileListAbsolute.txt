@@ -1,0 +1,6 @@
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.exe.config
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.exe
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.pdb
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.exe
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.pdb
+C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.csprojResolveAssemblyReference.cache
