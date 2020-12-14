@@ -16,25 +16,25 @@
                 <h4 class="badge badge-secondary">Formula valor unico</h4>
                 <br>
                 <input type="text" name="concepto" id="concepto" placeholder="Concepto">
-                <input type="number" name="valor" id="valor" placeholder="Constante">
-                <input type="number" name="i" id="i" placeholder="Valor de I">
-                <input type="text" name="periodos" id="periodos" placeholder="Periodos">
+                <input type="number" min=0 name="valor" id="valor" placeholder="Constante">
+                <input type="number" min=0 name="i" id="i" placeholder="Valor de I">
+                <input type="text" min=0 name="periodos" id="periodos" placeholder="Periodos">
             </div>
 
             <div class="col">
                 <h4 class="badge badge-secondary">Formula uniforme</h4>
                 <br>
                 <input type="text" name="concepto" id="concepto2" placeholder="Concepto">
-                <input type="number" name="constante" id="constante" placeholder="Constante">
-                <input type="number" name="i2" id="i2" placeholder="Valor de I">
-                <input type="number" name="periodos2" id="periodos2" placeholder="Periodos">
+                <input type="number" min=0 name="constante" id="constante" placeholder="Constante">
+                <input type="number" min=0 name="i2" id="i2" placeholder="Valor de I">
+                <input type="number" min=0 name="periodos2" id="periodos2" placeholder="Periodos">
             </div>
 
             <div class="col">
                 <h4 class="badge badge-secondary">Formula IEF</h4>
                 <br>
-                <input type="number" name="i3" id="i3" placeholder="Valor de I">
-                <input type="number" name="periodos3" id="periodos3" placeholder="periodos">
+                <input type="number" min=0 name="i3" id="i3" placeholder="Valor de I">
+                <input type="number" min=0 name="periodos3" id="periodos3" placeholder="Periodos">
             </div>
         </div>
 
@@ -73,6 +73,7 @@
         let resultado = document.getElementById('resultado');
         let acumDiv = document.getElementById('acumulador');
         let acumulador = 0;
+        let index = 0;
 
         function valorPresente(sumar){
             let obj = {};
@@ -117,9 +118,6 @@
             if(!sumar) result*=-1;
             acumulador+=result;
 
-            console.log("Obj: ",obj);
-            console.log("Result: ",{result,acumulador});
-
             appendWithResult("Uniforme", obj, result);
         }
 
@@ -130,14 +128,26 @@
             obj.Periodos = parseFloat(document.getElementById('periodos3').value);
 
             let result = Math.pow((1+obj.I),obj.Periodos)-1;
-
+            
             appendWithResult("IEF", obj, result);
         }
 
         function appendWithResult(name, params, result){
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('card-body');
             
+            if(isNaN(result)) return;
+
+            let deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = "Eliminar resultado";
+            deleteBtn.classList.add('btn-danger', 'btn-sm', 'btn');
+            deleteBtn.onclick = restarResultado;
+
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('card-body', name);   
+            
+            let p = document.createElement('p');
+            p.style.display = 'none';
+            p.innerHTML = result;
+
             let innerHtml = "<b> "+name+" - Resultado: "+result+"</b><br>";
 
             for(let key in params){
@@ -145,16 +155,33 @@
             }
 
             newDiv.innerHTML = innerHtml;
-            resultado.appendChild(newDiv);
-            resultado.appendChild(document.createElement('hr'));            
+            newDiv.appendChild(deleteBtn);
+            newDiv.appendChild(p);
+            resultado.insertBefore(document.createElement('hr'), resultado.childNodes[0]);        
+            resultado.insertBefore(newDiv, resultado.childNodes[0]);    
 
-            acumDiv.innerText = acumulador;
+            if(name != 'IEF') acumDiv.innerText = acumulador;
 
             limpiarForm();
         }
 
+        function restarResultado(e){
+
+            let div = e.srcElement.parentElement;
+            div.remove();
+
+            if(!div.innerHTML.includes('IEF')){
+                let value = parseFloat(div.children[7].innerHTML); 
+                acumulador-=value;
+                acumDiv.innerHTML = acumulador;
+            }
+
+            if(acumulador == 0) limpiar();
+        }
+
         function limpiar(){
             let children = resultado.childNodes;
+            acumulador = 0;
 
             if(acumDiv.innerText != "") acumDiv.innerText = "";
             if(children.length>0) resultado.removeChild(children[0]);
@@ -164,9 +191,7 @@
         function limpiarForm(){
             let input = document.querySelectorAll('input');
 
-            input.forEach( i => {
-                i.value = "";
-            })
+            input.forEach( i => { i.value = ""; });
         }
     </script>
 </body>

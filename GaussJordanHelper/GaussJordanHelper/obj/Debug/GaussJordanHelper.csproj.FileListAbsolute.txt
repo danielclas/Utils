@@ -4,3 +4,10 @@ C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanH
 C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.exe
 C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.pdb
 C:\Users\Dani\Desktop\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.csprojResolveAssemblyReference.cache
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.exe.config
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.exe
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\bin\Debug\GaussJordanHelper.pdb
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.csprojAssemblyReference.cache
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.csproj.CoreCompileInputs.cache
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.exe
+C:\Users\a309612\Desktop\Utils\GaussJordanHelper\GaussJordanHelper\obj\Debug\GaussJordanHelper.pdb

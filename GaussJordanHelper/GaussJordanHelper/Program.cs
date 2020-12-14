@@ -21,16 +21,16 @@ namespace GaussJordanHelper
 
         static string CalcularZJ()
         {
-            var matrix = new List<List<double>>();
+            var matrix = new List<List<string>>();
             var answer = new StringBuilder();
 
             foreach(var row in Clipboard.GetText().Split('\n'))
             {
-                var temp = new List<double>();
+                var temp = new List<string>();
                 var arr = row.Split('\t');
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    if(i!=1) temp.Add(double.Parse(arr[i]));
+                    if(i!=1) temp.Add(arr[i]);
                 }
 
                 matrix.Add(temp);
@@ -41,7 +41,13 @@ namespace GaussJordanHelper
                 double n = 0;
                 for (int j = 0; j < matrix.Count; j++)
                 {
-                    n += matrix[j][i] * matrix[j][0];
+                    string res = Operar(matrix[j][i], matrix[j][0], '*');
+                    if (res == "")
+                    {
+                        n = 0;
+                        break;
+                    }
+                    else n += double.Parse(res);
                 }
                 answer.Append(n.ToString() + '\t');
             }
@@ -51,16 +57,16 @@ namespace GaussJordanHelper
 
         static string Pivot()
         {
-            var matrix = new List<List<double>>();
+            var matrix = new List<List<string>>();
             var answer = new StringBuilder();
             int pCol, pRow;
 
             foreach (var r in Clipboard.GetText().Split('\n'))
             {
-                var temp = new List<double>();
+                var temp = new List<string>();
                 foreach (var k in r.Split('\t'))
                 {
-                    temp.Add(double.Parse(k));
+                    temp.Add(k);
                 }
                 matrix.Add(temp);
             }
@@ -79,7 +85,7 @@ namespace GaussJordanHelper
                 {
                     if (i != pRow && j != pCol)
                     {
-                        matrix[i][j] = ((pivot * matrix[i][j]) - (matrix[pRow][j] * matrix[i][pCol])) / pivot;
+                        matrix[i][j] = Pivotear(pivot, matrix[i][j], matrix[pRow][j], matrix[i][pCol]);
                     }
                 }
             }
@@ -88,7 +94,7 @@ namespace GaussJordanHelper
             var pivotRow = matrix.ElementAt(pRow);
             for (int i = 0; i < pivotRow.Count; i++)
             {
-                pivotRow[i] /= pivot;
+                pivotRow[i] = Operar(pivotRow[i], pivot, '/');
             }
 
             //Column of pivot (except row of pivot) is set to 0
@@ -98,7 +104,7 @@ namespace GaussJordanHelper
                 {
                     if (j == pCol && i != pRow)
                     {
-                        matrix[i][j] = 0;
+                        matrix[i][j] = "0";
                     }
                 }
             }
@@ -113,6 +119,34 @@ namespace GaussJordanHelper
             }
 
             return answer.ToString();
+        }
+
+        static string Operar(string s1, string s2, char operacion)
+        {
+            double n1, n2;
+            string res = "";
+
+            if(double.TryParse(s1, out n1) && double.TryParse(s2, out n2))
+            {
+                if (operacion == '/') res = (n1 / n2).ToString();
+                else res = (n1 * n2).ToString();
+            }
+
+            return res;
+        }
+
+        static string Pivotear(string piv, string s1, string s2, string s3)
+        {
+            double pivot, n1, n2, n3;
+            string res = "";
+
+            if(double.TryParse(piv, out pivot) && double.TryParse(s1, out n1) && double.TryParse(s2, out n2) && double.TryParse(s3, out n3))
+            {
+                double temp = ((pivot * n1) - (n2 * n3)) / pivot;
+                res = temp.ToString();
+            }
+
+            return res;
         }
     }
 }
